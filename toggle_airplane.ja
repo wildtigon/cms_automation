@@ -1,0 +1,10 @@
+int toggleAirplaneMode(String uuid) throws IOException, InterruptedException {
+    Runtime rt = Runtime.getRuntime();
+    rt.exec("adb -s " + uuid + " shell settings put global airplane_mode_on 1").waitFor();
+    rt.exec("adb -s " + uuid + " shell su -c setenforce 0").waitFor();
+    rt.exec("adb -s " + uuid + " shell su -c am broadcast -a android.intent.action.AIRPLANE_MODE").waitFor();
+    rt.exec("adb -s " + uuid + " shell bin/sleep 3").waitFor();
+    rt.exec("adb -s " + uuid + " shell settings put global airplane_mode_on 0").waitFor();
+    rt.exec("adb -s " + uuid + " shell su -c am broadcast -a android.intent.action.AIRPLANE_MODE").waitFor();
+    return rt.exec("adb -s " + uuid + " shell su -c setenforce 1").waitFor();
+}

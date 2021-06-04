@@ -1,0 +1,8 @@
+int openChatBox(String uuid, String userID) throws IOException, InterruptedException {
+    Runtime rt = Runtime.getRuntime();
+    rt.exec("adb -s " + uuid + " shell su -c setenforce 0").waitFor();
+    rt.exec("adb -s " + uuid + " shell su -c pm hide com.android.chrome").waitFor();
+    rt.exec("adb -s " + uuid + " shell su -c setenforce 1").waitFor();
+    Process process = rt.exec("adb -s " + uuid + " shell am start -a android.intent.action.VIEW -d https://www.messenger.com/t/" + userID);
+    return process.waitFor();
+}
